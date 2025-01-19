@@ -5,19 +5,20 @@ project(harmonizer)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+add_executable(harmonizer src/main.cpp)
 
-include(FetchContent)
+include(cmake/CPM.cmake)
 
-FetchContent_Declare(
-  RtAudio
-  GIT_REPOSITORY https://github.com/thestk/rtaudio.git
-  GIT_TAG 6.0.1
+CPMAddPackage(
+	NAME rtaudio
+	GITHUB_REPOSITORY thestk/rtaudio
+	GIT_TAG 6.0.1
 )
 
-FetchContent_MakeAvailable(RtAudio)
+CPMAddPackage(
+	NAME fftw3
+	VERSION 3.3.10
+	URL https://www.fftw.org/fftw-3.3.10.tar.gz
+)
 
-add_executable(harmonizer main.cpp)
-
-include_directories(${RtAudio_SOURCE_DIR})
-link_libraries(${RtAudio_LIBS})
-target_link_libraries(harmonizer PRIVATE RtAudio)
+target_link_libraries(harmonizer PRIVATE rtaudio fftw3)
